@@ -15,6 +15,13 @@ export class Service {
   }
 
   async createPost({ title, slug, content, featuredImage, status, userId }) {
+    const isValidSlug = /^[a-zA-Z0-9_.-]{1,36}$/.test(slug);
+
+    if (!isValidSlug) {
+      console.error("Invalid slug for documentId:", slug);
+      throw "Invalid slug for documentId";
+    }
+    
     try {
       return await this.databases.createDocument(
         config.appwriteDatabaseId,
@@ -48,6 +55,7 @@ export class Service {
       )
     } catch (error) {
       console.log("Appwrite serive :: updatePost :: error", error);
+      throw error
     }
   }
 

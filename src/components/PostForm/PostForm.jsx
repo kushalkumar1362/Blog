@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -16,6 +16,7 @@ export default function PostForm({ post }) {
   })
   const navigate = useNavigate()
   const userData = useSelector((state) => state.auth.userData);
+  const [error, setError] = useState(null)
 
   const submit = async (data) => {
     if (post) {
@@ -24,14 +25,17 @@ export default function PostForm({ post }) {
       if (file) {
         appwriteService.deleteFile(post.featuredImage);
       }
-      console.log(data);
-      const dbPost = await appwriteService.updatePost(post.$id, {
-        ...data,
-        featuredImage: file ? file.$id : undefined,
-      });
-
-      if (dbPost) {
-        navigate(`/post/${dbPost.$id}`);
+      try {
+        const dbPost = await appwriteService.updatePost(post.$id, {
+          ...data,
+          featuredImage: file ? file.$id : undefined,
+        });
+  
+        if (dbPost) {
+          navigate(`/post/${dbPost.$id}`);
+        }
+      } catch (error) {
+        setError(error.message)
       }
     }
     else {
@@ -40,13 +44,17 @@ export default function PostForm({ post }) {
       if (file) {
         const fileId = file.$id;
         data.featuredImage = fileId;
-
-        const dbPost = await appwriteService.createPost({
-          ...data,
-          userId: userData.$id
-        })
-        if (dbPost) {
-          navigate(`/post/${dbPost.$id}`)
+        setError("")
+        try {
+          const dbPost = await appwriteService.createPost({
+            ...data,
+            userId: userData.$id
+          })
+          if (dbPost) {
+            navigate(`/post/${dbPost.$id}`)
+          }
+        } catch (error) {
+          setError(error)
         }
       }
     }
@@ -82,6 +90,7 @@ export default function PostForm({ post }) {
           label="Title :"
           placeholder="Enter your title"
           className="mb-4"
+          required
           {...register("title", { required: true })}
         />
 
@@ -132,6 +141,7 @@ export default function PostForm({ post }) {
         <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">
           {post ? "Update" : "Submit"}
         </Button>
+        {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
 
       </div>
     </form >
