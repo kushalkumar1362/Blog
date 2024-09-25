@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { Provider } from 'react-redux'
-import { store } from './store/store.js'
+import store from './store/store.js'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { AddPost, AllPosts, EditPost, Home, Post, Signup } from "./pages/index.js";
-import { AuthLayout, Login } from './components/index.js'
+import { AddPost, MyPosts, EditPost, Home, Post, Signup, Login } from "./pages/index.js";
+import { AuthLayout } from './components/index.js'
 
 const router = createBrowserRouter([
   {
@@ -34,11 +34,11 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/all-posts",
+        path: "/my-posts",
         element: (
           <AuthLayout authentication>
             {" "}
-            <AllPosts />
+            <MyPosts />
           </AuthLayout>
         ),
       },

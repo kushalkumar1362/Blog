@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import appwriteService from '../appwrite/config'
 import { Container, PostCard } from '../components'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 export default function Home() {
   const [posts, setPosts] = useState([])
@@ -15,7 +16,7 @@ export default function Home() {
           }
         })
     }
-  }, [])
+  }, [authStatus])
 
   if (posts.length === 0) {
     return (
@@ -24,7 +25,7 @@ export default function Home() {
           <div className="flex flex-wrap">
             <div className="p-2 w-full">
               <h1 className="text-2xl font-bold hover:text-gray-500">
-                {!authStatus ? "Login to read posts" : "No posts available."}
+                {!authStatus ? <Link to={'/login'}>Login to read posts</Link> : "No posts available."}
               </h1>
             </div>
           </div>
