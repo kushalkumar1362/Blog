@@ -9,7 +9,7 @@ import Login from "./Login";
 import Logo from './Logo';
 import PostCard from "./PostCard";
 import Select from "./Select";
-import SignUp from "./SignUp";
+import Signup from "./Signup";
 import RTE from "./RTE";
 import PostForm from "./PostForm/PostForm";
 
@@ -25,7 +25,7 @@ export {
   Login,
   PostCard,
   Select,
-  SignUp,
+  Signup,
   RTE,
   PostForm,
 }
